@@ -1,5 +1,13 @@
-require "opengl/version"
+#external stuff
+require 'java'
+require 'java/lwjgl.jar'
 
-module Opengl
-  # Your code goes here...
+#monkey patching
+
+#define the default modules
+module OpenGL
 end
+
+#internal pieces
+require "opengl/version"
+require 'opengl/basic_display'

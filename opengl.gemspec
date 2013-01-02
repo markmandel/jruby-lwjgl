@@ -16,4 +16,13 @@ Gem::Specification.new do |gem|
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
+
+  # development stuff I can't live without
+  gem.add_development_dependency "rake"
+  gem.add_development_dependency "yard"
+  gem.add_development_dependency "kramdown"
+  gem.add_development_dependency "pry"
+  gem.add_development_dependency "pry-doc"
+  gem.add_development_dependency "pry-nav"
+
 end
