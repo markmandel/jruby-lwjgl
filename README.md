@@ -1,29 +1,20 @@
 # Opengl
 
-TODO: Write a gem description
+Examples of using [LWJGL](http://www.lwjgl.org/) with [JRuby](http://jruby.org/).
 
-## Installation
+As I'm learning LWJGL and OpenGL, I'm uploading examples here and writing blog posts on my [blog](http://www.compoundtheory.com)
 
-Add this line to your application's Gemfile:
-
-    gem 'opengl'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install opengl
+This is set up as a gem for convenience, although I can't see why you would want to install it.
 
 ## Usage
 
-TODO: Write usage instructions here
+You may want to install JRuby with RVM, as the .rvmrc sets up the appropriate JRUBY_OPTS environment variables to tell JRuby
+to tell the JVM to load up the native extensions that LWJGL needs.
 
 ## Contributing
 
 1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
+2. Create your feature branch (`git checkout -b feature/my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
+4. Push to the branch (`git push origin feature/my-new-feature`)
 5. Create new Pull Request
