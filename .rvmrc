@@ -1,0 +1,1 @@
+export JRUBY_OPTS="-J-Djava.library.path=lib/java/native"
