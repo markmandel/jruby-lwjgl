@@ -11,3 +11,4 @@ end
 #internal pieces
 require "opengl/version"
 require 'opengl/basic_display'
+require 'opengl/show_triangle'
