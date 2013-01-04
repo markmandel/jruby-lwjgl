@@ -3,6 +3,7 @@ java_import org.lwjgl.opengl.DisplayMode
 java_import org.lwjgl.opengl.GL11
 java_import org.lwjgl.opengl.GL15
 java_import org.lwjgl.opengl.GL20
+java_import org.lwjgl.opengl.GL30
 java_import org.lwjgl.BufferUtils
 
 #
@@ -73,6 +74,8 @@ class OpenGL::ShowTriangle
 		GL20.gl_link_program(@program_id)
 		GL20.gl_validate_program(@program_id)
 
+		puts "Validate Program", GL20.gl_get_program_info_log(@program_id, 200)
+
 		GL20.gl_delete_shader(vertex_shader)
 		GL20.gl_delete_shader(frag_shader)
 
@@ -80,16 +83,23 @@ class OpenGL::ShowTriangle
 
 	# initialise the vertex buffers
 	def init_vertex_buffers
+		#vao_id = GL30.gl_gen_vertex_arrays
+		#GL30.gl_bind_vertex_array(vao_id)
+
 		@buffer_id = GL15.gl_gen_buffers
 		GL15.gl_bind_buffer(GL15::GL_ARRAY_BUFFER, @buffer_id)
 
 		float_buffer = BufferUtils.create_float_buffer(@vertex_positions.size)
 		float_buffer.put(@vertex_positions.to_java(:float))
 
+		#MUST FLIP THE BUFFER! THIS PUTS IT BACK TO THE BEGINNING!
+		float_buffer.flip
+
 		GL15.gl_buffer_data(GL15::GL_ARRAY_BUFFER, float_buffer, GL15::GL_STATIC_DRAW)
 
+		# cleanup
 		GL15.gl_bind_buffer(GL15::GL_ARRAY_BUFFER, 0)
-
+		GL30.gl_bind_vertex_array(0)
 	end
 
 	# create a shader for you, and return the id

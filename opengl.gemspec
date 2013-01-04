@@ -4,12 +4,12 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'opengl/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = "opengl"
+  gem.name          = "jruby-lwjgl"
   gem.version       = Opengl::VERSION
-  gem.authors       = ["TODO: Write your name"]
-  gem.email         = ["TODO: Write your email address"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.authors       = ["Mark Mandel"]
+  gem.email         = ["mark.mandel@gmail.com"]
+  gem.description   = %q{Examples of using OpenGL with LWJGL with JRuby}
+  gem.summary       = %q{Examples of using OpenGL with LWJGL with JRuby}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($/)
