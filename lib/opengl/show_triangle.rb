@@ -107,7 +107,7 @@ class OpenGL::ShowTriangle
 	# @param [String] file_name the name of the glsl file
 	# @return [Integer] the shader id
 	def create_shader(shader_type, file_name)
-		shader_id = GL20.glCreateShader(shader_type)
+		shader_id = GL20.gl_create_shader(shader_type)
 		shader_file = File.new File.expand_path("../../glsl/#{file_name}", __FILE__)
 
 		GL20.gl_shader_source(shader_id, shader_file.read)
