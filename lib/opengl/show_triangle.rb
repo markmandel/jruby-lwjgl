@@ -99,7 +99,7 @@ class OpenGL::ShowTriangle
 
 		# cleanup
 		GL15.gl_bind_buffer(GL15::GL_ARRAY_BUFFER, 0)
-		GL30.gl_bind_vertex_array(0)
+		#GL30.gl_bind_vertex_array(0)
 	end
 
 	# create a shader for you, and return the id
