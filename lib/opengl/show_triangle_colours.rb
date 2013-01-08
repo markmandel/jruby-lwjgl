@@ -63,6 +63,8 @@ class OpenGL::ShowTriangleColours
 		GL20.gl_enable_vertex_attrib_array(1)
 
 		GL20.gl_vertex_attrib_pointer(0, 4, GL11::GL_FLOAT, false, 0, 0)
+
+		#Floats are 4 bytes, and there are 12 of them = 48 offset
 		GL20.gl_vertex_attrib_pointer(1, 4, GL11::GL_FLOAT, false, 0, 48)
 		GL11.gl_draw_arrays(GL11::GL_TRIANGLES, 0, 3)
 
