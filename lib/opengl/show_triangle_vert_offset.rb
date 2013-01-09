@@ -5,28 +5,23 @@ java_import org.lwjgl.opengl.GL15
 java_import org.lwjgl.opengl.GL20
 java_import org.lwjgl.opengl.GL30
 java_import org.lwjgl.BufferUtils
+java_import org.lwjgl.Sys
 
 #
-# Let's display a triangle, with a gradient
-class OpenGL::ShowTriangleColours
+# Let's display a triangle!
+class OpenGL::ShowTriangleVertOffset
 
 	# initialise
 	def initialize
 
-		@vertex_data = [
-			0.0,    0.5, 0.0, 1.0,
-			0.5, -0.366, 0.0, 1.0,
-			-0.5, -0.366, 0.0, 1.0,
-			1.0,    0.0, 0.0, 1.0,
-			0.0,    1.0, 0.0, 1.0,
-			0.0,    0.0, 1.0, 1.0,
+		@vertex_positions = [
+			0.75, 0.75, 0.0, 1.0,
+			0.75, -0.75, 0.0, 1.0,
+			-0.75, -0.75, 0.0, 1.0,
 		]
 
-		#pre calculate the byte size of a float.
-		@float_size = (java.lang.Float::SIZE/8)
-
 		Display.display_mode = DisplayMode.new(800, 600)
-		Display.title = "I am a triangle! (with different colours!)"
+		Display.title = "I am a triangle! (with vertex offsets!)"
 		Display.create
 
 		#initialise the viewport
@@ -52,36 +47,47 @@ class OpenGL::ShowTriangleColours
 	# display loop
 	def display
 
+		x_offset, y_offset = compute_position_offsets
+
 		#set the colour to clear.
 		GL11.gl_clear_color(0.0, 0.0, 0.0, 0.0)
 
 		#clear the buffer. Remember that Java static types come back as Ruby Constants.
 		GL11.gl_clear(GL11::GL_COLOR_BUFFER_BIT)
+
 		GL20.gl_use_program(@program_id)
 
+		GL20.gl_uniform2f(@offset_location, x_offset, y_offset)
+
 		GL15.gl_bind_buffer(GL15::GL_ARRAY_BUFFER, @buffer_id)
-
-		# we have 2 points
 		GL20.gl_enable_vertex_attrib_array(0)
-		GL20.gl_enable_vertex_attrib_array(1)
-
 		GL20.gl_vertex_attrib_pointer(0, 4, GL11::GL_FLOAT, false, 0, 0)
-
-		#Floats are 4 bytes, and there are 12 of them = 48 offset
-		GL20.gl_vertex_attrib_pointer(1, 4, GL11::GL_FLOAT, false, 0, @float_size * 12)
 		GL11.gl_draw_arrays(GL11::GL_TRIANGLES, 0, 3)
 
-		GL15.gl_bind_buffer(GL15::GL_ARRAY_BUFFER, 0)
 		GL20.gl_disable_vertex_attrib_array(0)
-		GL20.gl_disable_vertex_attrib_array(1)
 		GL20.gl_use_program(0)
+
+	end
+
+	# compute the offsets based on the time
+	# @return [Float] [Float] the x_offset, y_offset
+	def compute_position_offsets
+		loop_duration = 5
+		scale = (Math::PI * 2.0) / loop_duration
+		elapsed_time = Sys.get_time / 1000.0
+		current_time_through_loop = elapsed_time % loop_duration
+
+		x_offset = Math.cos(current_time_through_loop * scale) * 0.5
+		y_offset = Math.sin(current_time_through_loop * scale) * 0.5
+
+		return x_offset, y_offset
 
 	end
 
 	# initialise the program
 	def init_program
-		vertex_shader = create_shader(GL20::GL_VERTEX_SHADER, 'colour_gradient_vertex.glsl')
-		frag_shader = create_shader(GL20::GL_FRAGMENT_SHADER, 'colour_grandient_fragment.glsl')
+		vertex_shader = create_shader(GL20::GL_VERTEX_SHADER, 'offset_vertex.glsl')
+		frag_shader = create_shader(GL20::GL_FRAGMENT_SHADER, 'basic_fragment.glsl')
 
 		@program_id = GL20.gl_create_program
 		GL20.gl_attach_shader(@program_id, vertex_shader)
@@ -90,6 +96,10 @@ class OpenGL::ShowTriangleColours
 		GL20.gl_validate_program(@program_id)
 
 		puts "Validate Program", GL20.gl_get_program_info_log(@program_id, 200)
+
+		@offset_location = GL20.gl_get_uniform_location(@program_id, "offset")
+
+		puts "Offset Location: #{@offset_location}"
 
 		GL20.gl_delete_shader(vertex_shader)
 		GL20.gl_delete_shader(frag_shader)
@@ -104,8 +114,8 @@ class OpenGL::ShowTriangleColours
 		@buffer_id = GL15.gl_gen_buffers
 		GL15.gl_bind_buffer(GL15::GL_ARRAY_BUFFER, @buffer_id)
 
-		float_buffer = BufferUtils.create_float_buffer(@vertex_data.size)
-		float_buffer.put(@vertex_data.to_java(:float))
+		float_buffer = BufferUtils.create_float_buffer(@vertex_positions.size)
+		float_buffer.put(@vertex_positions.to_java(:float))
 
 		#MUST FLIP THE BUFFER! THIS PUTS IT BACK TO THE BEGINNING!
 		float_buffer.flip
@@ -135,7 +145,7 @@ class OpenGL::ShowTriangleColours
 
 	# off we go
 	def self.start
-		OpenGL::ShowTriangleColours.new
+		OpenGL::ShowTriangleVertOffset.new
 	end
 
 end
