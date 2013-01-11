@@ -109,6 +109,11 @@ class OpenGL::ShowTriangleVertFragOffset
 
 		puts "Validate Program", GL20.gl_get_program_info_log(@program_id, 200)
 
+		GL20.gl_delete_shader(vertex_shader)
+		GL20.gl_delete_shader(frag_shader)
+
+		GL20.gl_use_program(@program_id)
+
 		@offset_location = GL20.gl_get_uniform_location(@program_id, "offset")
 
 		puts "@offset_location: #{@offset_location}"
@@ -121,12 +126,10 @@ class OpenGL::ShowTriangleVertFragOffset
 
 		puts "frag_loop_location: #{frag_loop_location}"
 
-		GL20.gl_delete_shader(vertex_shader)
-		GL20.gl_delete_shader(frag_shader)
 
-		GL20.gl_use_program(@program_id)
 		@frag_loop = 50.0
 		GL20.gl_uniform1f(frag_loop_location, @frag_loop)
+
 		GL20.gl_use_program(0)
 
 
