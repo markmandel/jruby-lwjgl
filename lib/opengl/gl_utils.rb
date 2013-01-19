@@ -57,7 +57,7 @@ module OpenGL::GLUtils
 
 		end
 
-		def destory_display
+		def destroy_display
 			Display.destroy
 		end
 

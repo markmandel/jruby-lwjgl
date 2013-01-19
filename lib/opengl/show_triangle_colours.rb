@@ -39,7 +39,7 @@ class OpenGL::ShowTriangleColours
 
 		render_loop { display }
 
-		close_display
+		destroy_display
 
 
 	end

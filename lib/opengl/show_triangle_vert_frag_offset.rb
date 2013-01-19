@@ -7,9 +7,13 @@ java_import org.lwjgl.opengl.GL30
 java_import org.lwjgl.BufferUtils
 java_import org.lwjgl.Sys
 
+require "opengl/gl_utils"
+
 #
 # Let's display a triangle! With vertice and colour animations
 class OpenGL::ShowTriangleVertFragOffset
+	include OpenGL::GLUtils
+	add_start
 
 	# initialise
 	def initialize
@@ -23,26 +27,18 @@ class OpenGL::ShowTriangleVertFragOffset
 			-0.75, -0.75, 0.0, 1.0,
 		]
 
-		Display.display_mode = DisplayMode.new(800, 600)
-		Display.title = "I am a triangle! (with vertex offsets, and changing colours!)"
-		Display.create
+		create_display("I am a triangle! (with vertex offsets, and changing colours!)")
 
 		#initialise the viewport
 		GL11.gl_viewport(0, 0, Display.width, Display.height)
 
+		@program_id = compile_program("offset_vertex.glsl", "time_based_fragment.glsl")
 		init_program
 		init_vertex_buffers
 
-		while(!Display.is_close_requested)
+		render_loop { display }
 
-			display
-
-			# we'll force it down to 60 FPS
-			Display.sync(60)
-			Display.update()
-		end
-
-		Display.destroy
+		destroy_display
 
 
 	end
@@ -98,20 +94,6 @@ class OpenGL::ShowTriangleVertFragOffset
 
 	# initialise the program
 	def init_program
-		vertex_shader = create_shader(GL20::GL_VERTEX_SHADER, 'offset_vertex.glsl')
-		frag_shader = create_shader(GL20::GL_FRAGMENT_SHADER, 'time_based_fragment.glsl')
-
-		@program_id = GL20.gl_create_program
-		GL20.gl_attach_shader(@program_id, vertex_shader)
-		GL20.gl_attach_shader(@program_id, frag_shader)
-		GL20.gl_link_program(@program_id)
-		GL20.gl_validate_program(@program_id)
-
-		puts "Validate Program", GL20.gl_get_program_info_log(@program_id, 200)
-
-		GL20.gl_delete_shader(vertex_shader)
-		GL20.gl_delete_shader(frag_shader)
-
 		GL20.gl_use_program(@program_id)
 
 		@offset_location = GL20.gl_get_uniform_location(@program_id, "offset")
@@ -126,13 +108,10 @@ class OpenGL::ShowTriangleVertFragOffset
 
 		puts "frag_loop_location: #{frag_loop_location}"
 
-
 		@frag_loop = 50.0
 		GL20.gl_uniform1f(frag_loop_location, @frag_loop)
 
 		GL20.gl_use_program(0)
-
-
 	end
 
 	# initialise the vertex buffers
@@ -154,27 +133,6 @@ class OpenGL::ShowTriangleVertFragOffset
 		# cleanup
 		GL15.gl_bind_buffer(GL15::GL_ARRAY_BUFFER, 0)
 		#GL30.gl_bind_vertex_array(0)
-	end
-
-	# create a shader for you, and return the id
-	# @param [Integer] shader_type the GL20 shader type int
-	# @param [String] file_name the name of the glsl file
-	# @return [Integer] the shader id
-	def create_shader(shader_type, file_name)
-		shader_id = GL20.gl_create_shader(shader_type)
-		shader_file = File.new File.expand_path("../../glsl/#{file_name}", __FILE__)
-
-		GL20.gl_shader_source(shader_id, shader_file.read)
-		GL20.gl_compile_shader(shader_id)
-
-		puts file_name, GL20.gl_get_shader_info_log(shader_id, 200)
-
-		shader_id
-	end
-
-	# off we go
-	def self.start
-		OpenGL::ShowTriangleVertFragOffset.new
 	end
 
 end
