@@ -26,9 +26,6 @@ class OpenGL::ShowTriangleColours
 			0.0,    0.0, 1.0, 1.0,
 		]
 
-		#pre calculate the byte size of a float.
-		@float_size = (java.lang.Float::SIZE/8)
-
 		create_display("I am a triangle! (with different colours!)")
 
 		#initialise the viewport
@@ -63,7 +60,7 @@ class OpenGL::ShowTriangleColours
 		GL20.gl_vertex_attrib_pointer(0, 4, GL11::GL_FLOAT, false, 0, 0)
 
 		#Floats are 4 bytes, and there are 12 of them = 48 offset
-		GL20.gl_vertex_attrib_pointer(1, 4, GL11::GL_FLOAT, false, 0, @float_size * 12)
+		GL20.gl_vertex_attrib_pointer(1, 4, GL11::GL_FLOAT, false, 0, FLOAT_SIZE * 12)
 		GL11.gl_draw_arrays(GL11::GL_TRIANGLES, 0, 3)
 
 		GL15.gl_bind_buffer(GL15::GL_ARRAY_BUFFER, 0)

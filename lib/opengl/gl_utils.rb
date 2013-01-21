@@ -3,6 +3,10 @@ java_import org.lwjgl.opengl.GL11
 
 module OpenGL::GLUtils
 
+		#pre calculate the byte size of items. Useful.
+		FLOAT_SIZE = (java.lang.Float::SIZE/8)
+		SHORT_SIZE = (java.lang.Short::SIZE/8)
+
 		# initialised the program with the shaders that have been passed through
 		# @param [String] vertex_shader
 		# @param [String] frag_shader
