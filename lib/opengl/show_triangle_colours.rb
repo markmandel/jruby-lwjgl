@@ -31,7 +31,7 @@ class OpenGL::ShowTriangleColours
 		#initialise the viewport
 		GL11.gl_viewport(0, 0, Display.width, Display.height)
 
-		@program_id = compile_program 'colour_gradient_vertex.glsl', 'colour_grandient_fragment.glsl'
+		@program_id = compile_program 'colour_gradient_vertex.glsl', 'colour_passthrough.glsl'
 		init_vertex_buffers
 
 		render_loop { display }

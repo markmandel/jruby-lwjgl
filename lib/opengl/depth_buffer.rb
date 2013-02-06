@@ -124,7 +124,7 @@ class OpenGL::DepthBuffer
 
 	# initialise the program
 	def init_program
-		@program_id = compile_program('perspective_matrix_vertex.glsl', 'colour_grandient_fragment.glsl')
+		@program_id = compile_program('perspective_matrix_vertex.glsl', 'colour_passthrough.glsl')
 		@offset_location = GL20.gl_get_uniform_location(@program_id, "offset")
 		@perspective_matrix_location = GL20.gl_get_uniform_location(@program_id, "perspectiveMatrix")
 
