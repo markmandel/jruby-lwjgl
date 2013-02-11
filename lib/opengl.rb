@@ -10,11 +10,8 @@ end
 
 #internal pieces
 require "opengl/version"
-require 'opengl/basic_display'
-require 'opengl/show_triangle'
-require 'opengl/show_triangle_gradient'
-require 'opengl/show_triangle_colours'
-require 'opengl/show_triangle_vert_offset'
-require 'opengl/show_triangle_vert_frag_offset'
-require 'opengl/overlap_no_depth'
-require 'opengl/depth_buffer'
+
+#include all the files.
+Dir.new(File.join(File.dirname(__FILE__), "opengl")).find_all { |item| item.end_with?('.rb') }.each do |item|
+	require "opengl/#{item}"
+end
