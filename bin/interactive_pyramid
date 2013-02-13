@@ -1,0 +1,9 @@
+#!/usr/bin/env jruby
+
+# run
+raise("Only runs on JRuby.") unless (RUBY_PLATFORM =~ /java/)
+
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
+require 'opengl'
+
+OpenGL::InteractivePyramid.start
