@@ -20,8 +20,8 @@ class OpenGL::InteractivePyramid
 	LEFT_EXTENT = -RIGHT_EXTENT
 	TOP_EXTENT = 0.5
 	BOTTOM_EXTENT = -TOP_EXTENT
-	FRONT_EXTENT = 0.5
-	REAR_EXTENT = -FRONT_EXTENT
+	FRONT_EXTENT = -1.0
+	REAR_EXTENT = -1.5
 
 	#colour constants
 	GREEN_COLOUR = [0.75, 0.75, 1.0, 1.0]
@@ -72,8 +72,8 @@ class OpenGL::InteractivePyramid
 		@index_buffer_id = GL15.gl_gen_buffers
 		GL15.gl_bind_buffer(GL15::GL_ELEMENT_ARRAY_BUFFER, @index_buffer_id)
 
-		#buffer = BufferUtils.create_short_buffer(@index_data.size).put(@index_data.to_java(:short)).flip
-		#GL15.gl_buffer_data(GL15::GL_ELEMENT_ARRAY_BUFFER, buffer, GL15::GL_STATIC_DRAW)
+		buffer = BufferUtils.create_short_buffer(@index_data.size).put(@index_data.to_java(:short)).flip
+		GL15.gl_buffer_data(GL15::GL_ELEMENT_ARRAY_BUFFER, buffer, GL15::GL_STATIC_DRAW)
 
 		GL15.gl_bind_buffer(GL15::GL_ELEMENT_ARRAY_BUFFER, 0)
 
@@ -89,9 +89,9 @@ class OpenGL::InteractivePyramid
 		GL20.gl_enable_vertex_attrib_array(0)
 		GL20.gl_enable_vertex_attrib_array(1)
 		GL20.gl_vertex_attrib_pointer(0, 3, GL11::GL_FLOAT, false, 0, 0)
-		GL20.gl_vertex_attrib_pointer(1, 4, GL11::GL_FLOAT, false, 0, 4 * 3 * FLOAT_SIZE)
+		GL20.gl_vertex_attrib_pointer(1, 4, GL11::GL_FLOAT, false, 0, 5 * 3 * FLOAT_SIZE)
 
-		#GL15.gl_bind_buffer(GL15::GL_ELEMENT_ARRAY_BUFFER, @index_buffer_id)
+		GL15.gl_bind_buffer(GL15::GL_ELEMENT_ARRAY_BUFFER, @index_buffer_id)
 
 		GL30.gl_bind_vertex_array(0)
 
@@ -108,7 +108,7 @@ class OpenGL::InteractivePyramid
 		GL20.gl_use_program(@program_id)
 
 		GL30.gl_bind_vertex_array(@vao_id)
-		#GL11.gl_draw_elements(GL11::GL_TRIANGLES, @index_data.size, GL11::GL_UNSIGNED_SHORT, 0)
+		GL11.gl_draw_elements(GL11::GL_TRIANGLES, @index_data.size, GL11::GL_UNSIGNED_SHORT, 0)
 
 		#cleanup
 		GL30.gl_bind_vertex_array(0)
@@ -154,17 +154,18 @@ class OpenGL::InteractivePyramid
 			((LEFT_EXTENT + RIGHT_EXTENT)/2), TOP_EXTENT, ((FRONT_EXTENT + REAR_EXTENT)/2),
 
 			#Colours
-			GREEN_COLOUR,
-			GREEN_COLOUR,
-			GREEN_COLOUR,
-			GREEN_COLOUR,
-			GREEN_COLOUR
+			RED_COLOUR,
+			RED_COLOUR,
+			RED_COLOUR,
+			RED_COLOUR,
+			RED_COLOUR
 		]
 
 		#flatten out all the colours.
 		@vertex_data.flatten!
 
 		@index_data = [
+			0, 4, 1
 		]
 	end
 
