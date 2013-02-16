@@ -1,8 +1,10 @@
 #external stuff
 require 'java'
 require 'java/lwjgl.jar'
+require 'java/lwjgl_util.jar'
 
 #monkey patching
+require 'extensions/math'
 
 #define the default modules
 module OpenGL
