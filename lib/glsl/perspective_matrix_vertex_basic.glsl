@@ -5,11 +5,11 @@ layout(location = 1) in vec4 colour;
 
 smooth out vec4 theColour;
 
-uniform mat4 perspectiveMatrix;
-uniform mat4 transformMatrix;
+uniform mat4 cameraToClipMatrix;
+uniform mat4 modelToCameraMatrix;
 
 void main()
 {
-	gl_Position =  perspectiveMatrix * transformMatrix * position;
+	gl_Position =  cameraToClipMatrix * modelToCameraMatrix * position;
 	theColour = colour;
 }

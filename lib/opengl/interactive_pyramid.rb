@@ -147,8 +147,8 @@ class OpenGL::InteractivePyramid
 	# initialise the program
 	def init_program
 		@program_id = compile_program('perspective_matrix_vertex_basic.glsl', 'colour_passthrough.glsl')
-		@perspective_matrix_location = GL20.gl_get_uniform_location(@program_id, "perspectiveMatrix")
-		@transform_matrix_location = GL20.gl_get_uniform_location(@program_id, "transformMatrix")
+		@perspective_matrix_location = GL20.gl_get_uniform_location(@program_id, "cameraToClipMatrix")
+		@transform_matrix_location = GL20.gl_get_uniform_location(@program_id, "modelToCameraMatrix")
 
 		#set up the perspective matrix
 		z_near = 1.0
@@ -227,6 +227,11 @@ class OpenGL::InteractivePyramid
 
 	# calculate the y rotation
 	def calc_y_rotation
+		#translate in on the z axis
+		translation_to_origin = Matrix4f.new
+		translation_to_origin.m32 = -(@vertex_data[14])
+
+		#the rotate it on the Y axis.
 		cos = Math.cos @y_rotation
 		sin = Math.sin @y_rotation
 		@y_rotation_matrix.m00 = cos
@@ -234,7 +239,16 @@ class OpenGL::InteractivePyramid
 		@y_rotation_matrix.m20 = -sin
 		@y_rotation_matrix.m22 = cos
 
-		@y_rotation_matrix.store(@y_rotation_buffer)
+		#then translate it back out on the z axis.
+		temp = Matrix4f.new
+		Matrix4f.mul(translation_to_origin, @y_rotation_matrix, temp)
+
+		translation_to_origin.m32 = (@vertex_data[14])
+
+		result = Matrix4f.new
+		Matrix4f.mul(translation_to_origin, temp, result)
+
+		result.store(@y_rotation_buffer)
 		@y_rotation_buffer.flip
 	end
 
