@@ -58,10 +58,8 @@ class OpenGL::InteractivePyramid
 
 		@y_rotation = 0
 		@x_rotation = 0
-		@x_rotation_matrix = Matrix4f.new
-		@x_rotation_buffer = BufferUtils.create_float_buffer 16
-		@y_rotation_matrix = Matrix4f.new
-		@y_rotation_buffer = BufferUtils.create_float_buffer 16
+		@rotation_matrix = Matrix4f.new
+		@rotation_buffer = BufferUtils.create_float_buffer 16
 
 		render_loop do
 			input
@@ -119,7 +117,7 @@ class OpenGL::InteractivePyramid
 		@y_rotation -= 0.01 if Keyboard.is_key_down Keyboard::KEY_LEFT
 		@y_rotation += 0.01 if Keyboard.is_key_down Keyboard::KEY_RIGHT
 
-		calc_y_rotation
+		calc_rotation
 	end
 
 	# render a frame
@@ -132,7 +130,7 @@ class OpenGL::InteractivePyramid
 		GL11.gl_clear(GL11::GL_COLOR_BUFFER_BIT | GL11::GL_DEPTH_BUFFER_BIT)
 		GL20.gl_use_program(@program_id)
 
-		GL20.gl_uniform_matrix4(@transform_matrix_location, false, @y_rotation_buffer)
+		GL20.gl_uniform_matrix4(@transform_matrix_location, false, @rotation_buffer)
 
 
 		GL30.gl_bind_vertex_array(@vao_id)
@@ -224,23 +222,23 @@ class OpenGL::InteractivePyramid
 	m03[3]	m14[7]	m23[11]	m33[15]
 =end
 
-	# calculate the y rotation
-	def calc_y_rotation
+	# calculate the rotations
+	def calc_rotation
 		#translate in on the z axis
 		z = (@vertex_data[14])
 		sin = Math.sin(@y_rotation)
 		cos = Math.cos(@y_rotation)
 
 		# use wxMaxima to combine the translation and rotation matrices.
-		@y_rotation_matrix.m00 = cos
-		@y_rotation_matrix.m20 = sin
-		@y_rotation_matrix.m30 = -1 * sin * z
-		@y_rotation_matrix.m02 = -1 * sin
-		@y_rotation_matrix.m22 = cos
-		@y_rotation_matrix.m32 = z - (cos * z)
+		@rotation_matrix.m00 = cos
+		@rotation_matrix.m20 = sin
+		@rotation_matrix.m30 = -1 * sin * z
+		@rotation_matrix.m02 = -1 * sin
+		@rotation_matrix.m22 = cos
+		@rotation_matrix.m32 = z - (cos * z)
 
-		@y_rotation_matrix.store(@y_rotation_buffer)
-		@y_rotation_buffer.flip
+		@rotation_matrix.store(@rotation_buffer)
+		@rotation_buffer.flip
 	end
 
 end
