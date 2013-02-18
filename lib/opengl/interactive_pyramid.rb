@@ -241,7 +241,7 @@ class OpenGL::InteractivePyramid
 
 		#then translate it back out on the z axis.
 		temp = Matrix4f.new
-		Matrix4f.mul(translation_to_origin, @y_rotation_matrix, temp)
+		Matrix4f.mul(@y_rotation_matrix, translation_to_origin, temp)
 
 		translation_to_origin.m32 = (@vertex_data[14])
 
