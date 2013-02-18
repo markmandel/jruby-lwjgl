@@ -224,46 +224,22 @@ class OpenGL::InteractivePyramid
 	m03[3]	m14[7]	m23[11]	m33[15]
 =end
 
-
 	# calculate the y rotation
 	def calc_y_rotation
 		#translate in on the z axis
-		translation_to_origin = Matrix4f.new
-		translation_to_origin.m32 = -(@vertex_data[14])
+		z = (@vertex_data[14])
+		sin = Math.sin(@y_rotation)
+		cos = Math.cos(@y_rotation)
 
-		#the rotate it on the Y axis.
-		cos = Math.cos @y_rotation
-		sin = Math.sin @y_rotation
+		# use wxMaxima to combine the translation and rotation matrices.
 		@y_rotation_matrix.m00 = cos
-		@y_rotation_matrix.m02 = sin
-		@y_rotation_matrix.m20 = -sin
+		@y_rotation_matrix.m20 = sin
+		@y_rotation_matrix.m30 = -1 * sin * z
+		@y_rotation_matrix.m02 = -1 * sin
 		@y_rotation_matrix.m22 = cos
+		@y_rotation_matrix.m32 = z - (cos * z)
 
-		#then translate it back out on the z axis.
-		temp = Matrix4f.new
-		Matrix4f.mul(@y_rotation_matrix, translation_to_origin, temp)
-
-		translation_to_origin.m32 = (@vertex_data[14])
-
-		result = Matrix4f.new
-		@y_rotation_matrix.set_identity
-		Matrix4f.mul(translation_to_origin, temp, result)
-
-		puts "\\- MATRIX [#{@y_rotation}] -/"
-		puts result.to_s
-		puts '/- MATRIX -\\'
-
-
-=begin
-	\- MATRIX [0.4000000000000002] -/
-	0.921061		0.0	-0.38941833	-1.2656096
-	0.0 			1.0	0.0			0.0
-	0.38941833 	0.0	0.921061		-0.25655174
-	0.0			0.0	0.0			1.0
-	/- MATRIX -\
-=end
-
-		result.store(@y_rotation_buffer)
+		@y_rotation_matrix.store(@y_rotation_buffer)
 		@y_rotation_buffer.flip
 	end
 
