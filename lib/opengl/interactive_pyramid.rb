@@ -23,8 +23,8 @@ class OpenGL::InteractivePyramid
 	LEFT_EXTENT = -RIGHT_EXTENT
 	TOP_EXTENT = 0.5
 	BOTTOM_EXTENT = -TOP_EXTENT
-	FRONT_EXTENT = -3
-	REAR_EXTENT = -3.5
+	FRONT_EXTENT = -3.0
+	REAR_EXTENT = -4.0
 
 	#colour constants
 	GREEN_COLOUR = [0.75, 0.75, 1.0, 1.0]
