@@ -246,7 +246,22 @@ class OpenGL::InteractivePyramid
 		translation_to_origin.m32 = (@vertex_data[14])
 
 		result = Matrix4f.new
+		@y_rotation_matrix.set_identity
 		Matrix4f.mul(translation_to_origin, temp, result)
+
+		puts "\\- MATRIX [#{@y_rotation}] -/"
+		puts result.to_s
+		puts '/- MATRIX -\\'
+
+
+=begin
+	\- MATRIX [0.4000000000000002] -/
+	0.921061		0.0	-0.38941833	-1.2656096
+	0.0 			1.0	0.0			0.0
+	0.38941833 	0.0	0.921061		-0.25655174
+	0.0			0.0	0.0			1.0
+	/- MATRIX -\
+=end
 
 		result.store(@y_rotation_buffer)
 		@y_rotation_buffer.flip
