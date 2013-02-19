@@ -196,9 +196,9 @@ class OpenGL::InteractivePyramid
 
 			#Colours
 			RED_COLOUR,
+			GREEN_COLOUR,
 			RED_COLOUR,
-			RED_COLOUR,
-			RED_COLOUR,
+			BLUE_COLOUR,
 			RED_COLOUR
 		]
 
