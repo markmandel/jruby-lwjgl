@@ -117,6 +117,9 @@ class OpenGL::InteractivePyramid
 		@y_rotation -= 0.01 if Keyboard.is_key_down Keyboard::KEY_LEFT
 		@y_rotation += 0.01 if Keyboard.is_key_down Keyboard::KEY_RIGHT
 
+		@x_rotation -= 0.01 if Keyboard.is_key_down Keyboard::KEY_UP
+		@x_rotation += 0.01 if Keyboard.is_key_down Keyboard::KEY_DOWN
+
 		calc_rotation
 	end
 
@@ -211,31 +214,45 @@ class OpenGL::InteractivePyramid
 			0, 4, 1, #front
 			3, 4, 0, #left
 			2, 1, 4,  #right
-			3, 2, 4  #rear
+			3, 2, 4,  #rear
+
+			#bottom
+			0, 1, 3,
+			1, 2, 3
 		]
 	end
 
 =begin
 	m00[0]	m10[4]	m20[8]	m30[12]
-	m01[1]	m12[5]	m21[9]	m31[13]
-	m02[2]	m13[6]	m22[10]	m32[14]
-	m03[3]	m14[7]	m23[11]	m33[15]
+	m01[1]	m11[5]	m21[9]	m31[13]
+	m02[2]	m12[6]	m22[10]	m32[14]
+	m03[3]	m13[7]	m23[11]	m33[15]
 =end
 
 	# calculate the rotations
 	def calc_rotation
 		#translate in on the z axis
 		z = (@vertex_data[14])
-		sin = Math.sin(@y_rotation)
-		cos = Math.cos(@y_rotation)
+		sin_y = Math.sin(@y_rotation)
+		cos_y = Math.cos(@y_rotation)
 
-		# use wxMaxima to combine the translation and rotation matrices.
-		@rotation_matrix.m00 = cos
-		@rotation_matrix.m20 = sin
-		@rotation_matrix.m30 = -1 * sin * z
-		@rotation_matrix.m02 = -1 * sin
-		@rotation_matrix.m22 = cos
-		@rotation_matrix.m32 = z - (cos * z)
+		sin_x = Math.sin(@x_rotation)
+		cos_x = Math.cos(@x_rotation)
+
+		# translate in, rotate x and y, then translate out.
+		@rotation_matrix.m00 = cos_y
+		@rotation_matrix.m20 = sin_y
+		@rotation_matrix.m30 = -sin_y * z
+
+		@rotation_matrix.m01 = sin_x * sin_y
+		@rotation_matrix.m11 = cos_x
+		@rotation_matrix.m21 = (-sin_x) * cos_y
+		@rotation_matrix.m31 = sin_x * cos_y * z
+
+		@rotation_matrix.m02 = (-cos_x) * sin_y
+		@rotation_matrix.m12 = sin_x
+		@rotation_matrix.m22 = cos_x * cos_y
+		@rotation_matrix.m32 = z - (cos_x * cos_y * z)
 
 		@rotation_matrix.store(@rotation_buffer)
 		@rotation_buffer.flip
