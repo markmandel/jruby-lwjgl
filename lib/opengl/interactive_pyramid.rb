@@ -159,7 +159,7 @@ class OpenGL::InteractivePyramid
 		perspective_matrix_buffer = BufferUtils.create_float_buffer(16);
 		perspective_matrix = Matrix4f.new
 
-		perspective_matrix.m00 = @frustrum_scale
+		perspective_matrix.m00 = (@frustrum_scale / (Display.width.fdiv(Display.height))) #aspect ratio. use fdiv as height and width are ints.
 		perspective_matrix.m11 = @frustrum_scale
 		perspective_matrix.m22 = (z_far + z_near) / (z_near - z_far)
 		perspective_matrix.m32 = (2.0 * z_far * z_near) / (z_near - z_far)
