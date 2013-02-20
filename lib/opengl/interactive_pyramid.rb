@@ -9,7 +9,6 @@ java_import org.lwjgl.util.vector.Matrix4f
 java_import org.lwjgl.util.vector.Vector3f
 
 require "opengl/gl_utils"
-require "pry"
 
 #
 #  Attempting to do a pyramid that is interactive.

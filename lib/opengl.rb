@@ -1,5 +1,4 @@
 #external stuff
-require 'java'
 require 'java/lwjgl.jar'
 require 'java/lwjgl_util.jar'
 
